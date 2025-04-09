@@ -17,7 +17,7 @@ const Navbar = () => {
   return (
     <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc", marginBottom: "1rem" }}>
       <Link to="/" style={{ marginRight: "1rem", fontWeight: "bold" }}>
-        YandexFood 2.0
+        LAMBORJEIMYN
       </Link>
 
       <Link to="/restaurants" style={{ marginRight: "1rem" }}>

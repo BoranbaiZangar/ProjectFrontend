@@ -1,4 +1,3 @@
-// src/pages/OrdersPage.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../redux/orderSlice";
@@ -28,6 +27,21 @@ const OrdersPage = () => {
     dispatch(fetchOrders(user.role === "Admin" ? "ALL" : user.id));
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "in progress":
+        return "#f1c40f"; // жёлтый
+      case "confirmed":
+        return "#3498db"; // синий
+      case "delivered":
+        return "#2ecc71"; // зелёный
+      case "cancelled":
+        return "#e74c3c"; // красный
+      default:
+        return "#999";
+    }
+  };
+
   if (loading) return <p>Загрузка заказов...</p>;
   if (error) return <p>Ошибка: {error}</p>;
 
@@ -37,13 +51,22 @@ const OrdersPage = () => {
       {orders.length === 0 ? (
         <p>Нет заказов</p>
       ) : (
-        <ul>
+        <ul style={{ listStyle: "none", padding: 0 }}>
           {orders.map((order) => (
-            <li key={order.id} style={{ marginBottom: "1rem" }}>
+            <li
+              key={order.id}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: "1rem",
+                marginBottom: "1rem",
+              }}
+            >
               <strong>Заказ #{order.id}</strong>
               {user.role === "Admin" && (
                 <p>Клиент: User #{order.userId}</p>
               )}
+
               <ul>
                 {order.items.map((item, index) => (
                   <li key={index}>
@@ -51,6 +74,7 @@ const OrdersPage = () => {
                   </li>
                 ))}
               </ul>
+
               {user.role === "Admin" ? (
                 <>
                   <label>Статус: </label>
@@ -68,7 +92,20 @@ const OrdersPage = () => {
                   </select>
                 </>
               ) : (
-                <p>Статус: <strong>{order.status}</strong></p>
+                <p>
+                  Статус:{" "}
+                  <span
+                    style={{
+                      padding: "4px 8px",
+                      borderRadius: "5px",
+                      backgroundColor: getStatusColor(order.status),
+                      color: "#fff",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {order.status}
+                  </span>
+                </p>
               )}
             </li>
           ))}
